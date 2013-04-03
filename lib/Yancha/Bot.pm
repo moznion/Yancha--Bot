@@ -116,19 +116,23 @@ This document describes Yancha::Bot version 0.01
 =over
 
 =item C<< new >>
+
 コンストラクタです。第一引数にHash リファレンス形式でconfig を渡して使います。
 第二引数には関数リファレンス形式でリスナーを作成する関数を渡します。
 第一引数は必須ですが、第二引数は省略が可能です。
 
 =item C<< get_yancha_auth_token >>
+
 Authentication Token を取得します。コンストラクタで第二引数で関数リファレンスを
 指定している場合は、Token を取得した後にその関数が呼ばれます。
 
 =item C<< post_yancha_message >>
+
 第一引数に指定された文字列をYancha にPost します。
 先にAuthentication Token を取得していないと動きません。
 
 =item C<< set_timer >>
+
 第一引数に設定された秒数だけ待ってから、コンストラクタで指定された関数リファレンスを
 実行します。第一引数が省略された場合は待ち処理無しで関数リファレンスを実行します。
 関数リファレンスが設定されていない場合は何もしません。
