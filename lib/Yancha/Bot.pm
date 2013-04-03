@@ -29,7 +29,7 @@ sub get_yancha_auth_token {
               . uri_escape_utf8( $config->{BotName} )
               . '&token_only=1',
             cb => sub {
-                my ( $body, $headers ) = shift;
+                my $body  = shift;
                 $self->{yancha_auth_token} = $body;
                 if ( $self->{yancha_auth_token} ) {
                     $self->set_timer->(0);
@@ -38,7 +38,6 @@ sub get_yancha_auth_token {
         }
     );
 
-    my $http_req = $req->to_http_message();
     $req->send();
 }
 
@@ -59,11 +58,10 @@ sub post_yancha_message {
               . '&text='
               . uri_escape_utf8($message),
             cb => sub {
-                my ( $body, $headers ) = shift;
+                my $body = shift;
               }
         }
     );
-    my $http_req = $req->to_http_message;
     $req->send();
 }
 
