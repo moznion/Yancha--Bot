@@ -9,9 +9,10 @@ use AnyEvent::HTTP::Request;
 our $VERSION = '0.01';
 
 sub new {
-    my ( $class, $config ) = @_;
+    my ( $class, $config, $listener ) = @_;
     bless {
         config            => $config,
+        listener          => $listener,
         yancha_auth_token => undef,
     }, $class;
 }
@@ -31,8 +32,7 @@ sub get_yancha_auth_token {
                 my ( $body, $headers ) = shift;
                 $self->{yancha_auth_token} = $body;
                 if ( $self->{yancha_auth_token} ) {
-
-                    # $self->set_timer->(0);
+                    $self->set_timer->(0);
                 }
             },
         }
@@ -66,11 +66,25 @@ sub post_yancha_message {
     my $http_req = $req->to_http_message;
     $req->send();
 }
+
+sub set_timer {
+    my ( $self, $after ) = @_;
+
+    $self->{listener} || return;
+
+    $after ||= 0;
+    my $listener_timer;
+    $listener_timer = AnyEvent->timer(
+        after => $after,
+        cb    => sub {
+            undef $listener_timer;
+            $self->{listener}->();
+        }
+    );
+}
 1;
 __END__
 
-1; # Magic true value required at end of module
-__END__
 
 =head1 NAME
 
