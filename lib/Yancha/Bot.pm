@@ -88,114 +88,72 @@ __END__
 
 =head1 NAME
 
-Yancha::Bot - [One line description of module's purpose here]
+Yancha::Bot - Provides supplementary functions to make bots for Yancha
 
 
 =head1 VERSION
 
-This document describes Yancha::Bot version 0.0.1
+This document describes Yancha::Bot version 0.01
 
 
 =head1 SYNOPSIS
 
     use Yancha::Bot;
 
-=for author to fill in:
-    Brief code example(s) here showing commonest usage(s).
-    This section will be as far as many users bother reading
-    so make it as educational and exeplary as possible.
+    my $bot = Yancha::Bot->new($config, $create_listener);
+    $bot->get_yancha_auth_token();
+
+    # as you like:
+    $bot->post_yancha_message("Rock'n'Roll!!!!!");
 
 
 =head1 DESCRIPTION
 
-=for author to fill in:
-    Write a full description of the module and its features here.
-    Use subsections (=head2, =head3) as appropriate.
+このモジュールはYancha 向けのBot を作成する際に役立つ補助関数を提供します.
 
 
-=head1 INTERFACE
-
-=for author to fill in:
-    Write a separate section listing the public components of the modules
-    interface. These normally consist of either subroutines that may be
-    exported, or methods that may be called on objects belonging to the
-    classes provided by the module.
-
-
-=head1 DIAGNOSTICS
-
-=for author to fill in:
-    List every single error and warning message that the module can
-    generate (even the ones that will "never happen"), with a full
-    explanation of each problem, one or more likely causes, and any
-    suggested remedies.
+=head1 METHODS
 
 =over
 
-=item C<< Error message here, perhaps with %s placeholders >>
+=item C<< new >>
+コンストラクタです。第一引数にHash リファレンス形式でconfig を渡して使います。
+第二引数には関数リファレンス形式でリスナーを作成する関数を渡します。
+第一引数は必須ですが、第二引数は省略が可能です。
 
-[Description of error here]
+=item C<< get_yancha_auth_token >>
+Authentication Token を取得します。コンストラクタで第二引数で関数リファレンスを
+指定している場合は、Token を取得した後にその関数が呼ばれます。
 
-=item C<< Another error message here >>
+=item C<< post_yancha_message >>
+第一引数に指定された文字列をYancha にPost します。
+先にAuthentication Token を取得していないと動きません。
 
-[Description of error here]
-
-[Et cetera, et cetera]
+=item C<< set_timer >>
+第一引数に設定された秒数だけ待ってから、コンストラクタで指定された関数リファレンスを
+実行します。第一引数が省略された場合は待ち処理無しで関数リファレンスを実行します。
+関数リファレンスが設定されていない場合は何もしません。
 
 =back
 
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
-=for author to fill in:
-    A full explanation of any configuration system(s) used by the
-    module, including the names and locations of any configuration
-    files, and the meaning of any environment variables or properties
-    that can be set. These descriptions must also include details of any
-    configuration language used.
-
-Yancha::Bot requires no configuration files or environment variables.
+設定ファイルが必要です。sample 内の設定ファイル例をご覧ください。
 
 
 =head1 DEPENDENCIES
 
-=for author to fill in:
-    A list of all the other modules that this module relies upon,
-    including any restrictions on versions, and an indication whether
-    the module is part of the standard Perl distribution, part of the
-    module's distribution, or must be installed separately. ]
+URI::Escape (version 3.31 or later);
 
-None.
-
-
-=head1 INCOMPATIBILITIES
-
-=for author to fill in:
-    A list of any modules that this module cannot be used in conjunction
-    with. This may be due to name conflicts in the interface, or
-    competition for system or program resources, or due to internal
-    limitations of Perl (for example, many modules that use source code
-    filters are mutually incompatible).
-
-None reported.
+AnyEvent::HTTP::Request (version 0.301 or later);
 
 
 =head1 BUGS AND LIMITATIONS
 
-=for author to fill in:
-    A list of known problems with the module, together with some
-    indication Whether they are likely to be fixed in an upcoming
-    release. Also a list of restrictions on the features the module
-    does provide: data types that cannot be handled, performance issues
-    and the circumstances in which they may arise, practical
-    limitations on the size of data sets, special cases that are not
-    (yet) handled, etc.
-
 No bugs have been reported.
 
-Please report any bugs or feature requests to
-C<bug-yancha-bot@rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org>.
+何かありましたら本リポジトリのIssues に上げて下さい。
 
 
 =head1 AUTHOR

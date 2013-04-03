@@ -1,0 +1,8 @@
+use strict;
+use warnings;
+
++{
+    'YanchaUrl' => 'http://example.com:3000',
+    'YanchaTag' => '#MOHICAN_PARTY',
+    'BotName'   => 'Awesome Bot'
+};
