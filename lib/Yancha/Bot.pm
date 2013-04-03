@@ -1,20 +1,73 @@
 package Yancha::Bot;
-
 use strict;
 use warnings;
-use Carp;
+use utf8;
 
-use version; our $VERSION = qv('0.0.1');
+use URI::Escape;
+use AnyEvent::HTTP::Request;
 
-# Other recommended modules (uncomment to use):
-#  use IO::Prompt;
-#  use Perl6::Export;
-#  use Perl6::Slurp;
-#  use Perl6::Say;
+our $VERSION = '0.01';
 
+sub new {
+    my ( $class, $config ) = @_;
+    bless {
+        config            => $config,
+        yancha_auth_token => undef,
+    }, $class;
+}
 
-# Module implementation here
+sub get_yancha_auth_token {
+    my $self = shift;
 
+    my $config = $self->{config};
+    my $req    = AnyEvent::HTTP::Request->new(
+        {
+            method => 'GET',
+            uri    => $config->{YanchaUrl}
+              . '/login?nick='
+              . uri_escape_utf8( $config->{BotName} )
+              . '&token_only=1',
+            cb => sub {
+                my ( $body, $headers ) = shift;
+                $self->{yancha_auth_token} = $body;
+                if ( $self->{yancha_auth_token} ) {
+
+                    # $self->set_timer->(0);
+                }
+            },
+        }
+    );
+
+    my $http_req = $req->to_http_message();
+    $req->send();
+}
+
+sub post_yancha_message {
+    my ( $self, $message ) = @_;
+
+    my $config = $self->{config};
+
+    $message =~ s/#/＃/g;
+    $message .= " $config->{YanchaTag}";
+
+    my $req = AnyEvent::HTTP::Request->new(
+        {
+            method => 'GET',
+            uri    => $config->{YanchaUrl}
+              . '/api/post?token='
+              . $self->{yancha_auth_token}
+              . '&text='
+              . uri_escape_utf8($message),
+            cb => sub {
+                my ( $body, $headers ) = shift;
+              }
+        }
+    );
+    my $http_req = $req->to_http_message;
+    $req->send();
+}
+1;
+__END__
 
 1; # Magic true value required at end of module
 __END__
