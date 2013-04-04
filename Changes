@@ -1,4 +1,7 @@
 Revision history for Yancha::Bot
 
-0.0.1    Thu Apr  4 03:44:23 2013
+0.02    Thu Apr 04 14:20:14 +0900 2013
+        - Fixed silly bugs.
+
+0.01    Thu Apr 04 03:44:23 +0900 2013
         - Initial release

@@ -6,7 +6,7 @@ use utf8;
 use URI::Escape;
 use AnyEvent::HTTP::Request;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub new {
     my ( $class, $config, $listener ) = @_;
@@ -32,7 +32,7 @@ sub get_yancha_auth_token {
                 my $body  = shift;
                 $self->{yancha_auth_token} = $body;
                 if ( $self->{yancha_auth_token} ) {
-                    $self->set_timer->(0);
+                    $self->set_timer(0);
                 }
             },
         }
@@ -92,7 +92,7 @@ Yancha::Bot - Provides supplementary functions to make bots for Yancha
 
 =head1 VERSION
 
-This document describes Yancha::Bot version 0.01
+This document describes Yancha::Bot version 0.02
 
 
 =head1 SYNOPSIS
