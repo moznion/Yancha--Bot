@@ -48,6 +48,9 @@ sub post_yancha_message {
 
     my $config = $self->{config};
 
+    # Set default tag (#PUBLIC)
+    $config->{YanchaTag} ||= '#PUBLIC';
+
     $message =~ s/#/＃/g;
     $message .= " $config->{YanchaTag}";
 
