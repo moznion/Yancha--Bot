@@ -7,7 +7,7 @@ use Carp;
 use URI::Escape;
 use AnyEvent::HTTP::Request;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 sub new {
     my ( $class, $config, $callback ) = @_;
@@ -118,7 +118,7 @@ Yancha::Bot - Provides supplementary functions to make bots for Yancha
 
 =head1 VERSION
 
-This document describes Yancha::Bot version 0.10
+This document describes Yancha::Bot version 0.11
 
 
 =head1 SYNOPSIS
