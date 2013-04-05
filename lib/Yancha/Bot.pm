@@ -51,6 +51,11 @@ sub post_yancha_message {
     # Set default tag (#PUBLIC)
     $config->{YanchaTag} ||= '#PUBLIC';
 
+    # Complete '#' prefix.
+    unless ($config->{YanchaTag} =~ /^#/) {
+        $config->{YanchaTag} = '#' . $config->{YanchaTag};
+    }
+
     $message =~ s/#/＃/g;
     $message .= " $config->{YanchaTag}";
 
