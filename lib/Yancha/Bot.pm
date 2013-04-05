@@ -73,11 +73,11 @@ sub callback_later {
     $self->{callback} || return;
 
     $after ||= 0;
-    my $listener_timer;
-    $listener_timer = AnyEvent->timer(
+    my $callback_timer;
+    $callback_timer = AnyEvent->timer(
         after => $after,
         cb    => sub {
-            undef $listener_timer;
+            undef $callback_timer;
             $self->{callback}->();
         }
     );
