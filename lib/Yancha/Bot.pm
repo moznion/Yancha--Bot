@@ -2,22 +2,23 @@ package Yancha::Bot;
 use strict;
 use warnings;
 use utf8;
+use Carp;
 
 use URI::Escape;
 use AnyEvent::HTTP::Request;
 
-our $VERSION = '0.02';
+our $VERSION = '0.10';
 
 sub new {
-    my ( $class, $config, $listener ) = @_;
+    my ( $class, $config, $callback ) = @_;
     bless {
         config            => $config,
-        listener          => $listener,
+        callback          => $callback,
         yancha_auth_token => undef,
     }, $class;
 }
 
-sub get_yancha_auth_token {
+sub up {
     my $self = shift;
 
     my $config = $self->{config};
@@ -32,13 +33,14 @@ sub get_yancha_auth_token {
                 my $body  = shift;
                 $self->{yancha_auth_token} = $body;
                 if ( $self->{yancha_auth_token} ) {
-                    $self->set_timer(0);
+                    $self->callback_later(0);
                 }
             },
         }
     );
 
     $req->send();
+    return $self->{yancha_auth_token};
 }
 
 sub post_yancha_message {
@@ -65,10 +67,10 @@ sub post_yancha_message {
     $req->send();
 }
 
-sub set_timer {
+sub callback_later {
     my ( $self, $after ) = @_;
 
-    $self->{listener} || return;
+    $self->{callback} || return;
 
     $after ||= 0;
     my $listener_timer;
@@ -76,9 +78,25 @@ sub set_timer {
         after => $after,
         cb    => sub {
             undef $listener_timer;
-            $self->{listener}->();
+            $self->{callback}->();
         }
     );
+}
+
+# DEPRECATED
+sub get_yancha_auth_token {
+    my $self = shift;
+
+    carp "'get_yancha_auth_token()' has been deprecated. Please use 'up()'.\n";
+    $self->up();
+}
+
+# DEPRECATED
+sub set_timer {
+    my ( $self, $after ) = @_;
+
+    carp "'set_timer()' has been deprecated. Please use 'callback_later()'.\n";
+    $self->callback_later($after);
 }
 1;
 __END__
@@ -92,15 +110,15 @@ Yancha::Bot - Provides supplementary functions to make bots for Yancha
 
 =head1 VERSION
 
-This document describes Yancha::Bot version 0.02
+This document describes Yancha::Bot version 0.10
 
 
 =head1 SYNOPSIS
 
     use Yancha::Bot;
 
-    my $bot = Yancha::Bot->new($config, $create_listener);
-    $bot->get_yancha_auth_token();
+    my $bot = Yancha::Bot->new($config, $callback);
+    $bot->up();
 
     # as you like:
     $bot->post_yancha_message("Rock'n'Roll!!!!!");
@@ -121,9 +139,9 @@ This document describes Yancha::Bot version 0.02
 第二引数には関数リファレンス形式でリスナーを作成する関数を渡します。
 第一引数は必須ですが、第二引数は省略が可能です。
 
-=item C<< get_yancha_auth_token >>
+=item C<< up >>
 
-Authentication Token を取得します。コンストラクタで第二引数で関数リファレンスを
+Authentication Token を取得し、bot を起動します。コンストラクタで第二引数で関数リファレンスを
 指定している場合は、Token を取得した後にその関数が呼ばれます。
 
 =item C<< post_yancha_message >>
@@ -131,7 +149,7 @@ Authentication Token を取得します。コンストラクタで第二引数�
 第一引数に指定された文字列をYancha にPost します。
 先にAuthentication Token を取得していないと動きません。
 
-=item C<< set_timer >>
+=item C<< callback_later >>
 
 第一引数に設定された秒数だけ待ってから、コンストラクタで指定された関数リファレンスを
 実行します。第一引数が省略された場合は待ち処理無しで関数リファレンスを実行します。
