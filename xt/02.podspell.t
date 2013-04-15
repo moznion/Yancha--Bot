@@ -10,3 +10,4 @@ moznion@gmail.com
 Yancha::Bot
 MERCHANTABILITY
 bots
+LICENCE
