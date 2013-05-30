@@ -6,7 +6,7 @@ Yancha::Bot - Provides supplementary functions to make bots for Yancha
 
 # VERSION
 
-This document describes Yancha::Bot version 0.11
+This document describes Yancha::Bot version 0.12
 
 
 
