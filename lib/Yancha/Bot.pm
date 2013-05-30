@@ -11,6 +11,14 @@ our $VERSION = '0.11';
 
 sub new {
     my ( $class, $config, $callback ) = @_;
+
+    ### set default values
+    $config              ||= {};
+    $config->{YanchaUrl} ||= 'http://127.0.0.1:3000';
+    $config->{BotName}   ||= __PACKAGE__;
+    $config->{YanchaTag} ||= '#PUBLIC';
+    $callback            ||= sub { };
+
     bless {
         config            => $config,
         callback          => $callback,
@@ -53,16 +61,11 @@ sub post_yancha_message {
 
     my $config = $self->{config};
 
-    # Set default tag (#PUBLIC)
-    $config->{YanchaTag} ||= '#PUBLIC';
-
     # Complete '#' prefix.
-    unless ($config->{YanchaTag} =~ /^#/) {
-        $config->{YanchaTag} = '#' . $config->{YanchaTag};
-    }
+    my $tag = $config->{YanchaTag} =~ /^#/ ? $config->{YanchaTag} : '#'. $config->{YanchaTag};
 
     $message =~ s/#/＃/g;
-    $message .= " $config->{YanchaTag}";
+    $message .= " $tag";
 
     my $uri = URI->new( $config->{YanchaUrl} );
     $uri->path('/api/post');
