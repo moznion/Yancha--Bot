@@ -61,11 +61,13 @@ sub post_yancha_message {
 
     my $config = $self->{config};
 
-    # Complete '#' prefix.
-    my $tag = $config->{YanchaTag} =~ /^#/ ? $config->{YanchaTag} : '#'. $config->{YanchaTag};
+    my @tags = map {
+        $_ = '#'.$_ unless $_ =~ /^#/;
+        uc($_);
+    } ref( $config->{YanchaTag} ) eq 'ARRAY' ? @{$config->{YanchaTag}} : ( $config->{YanchaTag} );
 
     $message =~ s/#/＃/g;
-    $message .= " $tag";
+    $message = join( ' ', $message, @tags );
 
     my $uri = URI->new( $config->{YanchaUrl} );
     $uri->path('/api/post');
