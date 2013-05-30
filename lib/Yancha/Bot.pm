@@ -86,7 +86,7 @@ sub callback_later {
         after => $after,
         cb    => sub {
             undef $callback_timer;
-            $self->{callback}->();
+            $self->{callback}->($self);
         }
     );
 }
