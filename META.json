@@ -25,11 +25,6 @@
       ]
    },
    "prereqs" : {
-      "build" : {
-         "requires" : {
-            "Test::More" : "0.98"
-         }
-      },
       "configure" : {
          "requires" : {
             "CPAN::Meta" : "0",
@@ -50,6 +45,11 @@
             "AnyEvent::HTTP::Request" : "0.301",
             "URI" : "1.60",
             "perl" : "5.008009"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0.98"
          }
       }
    },
