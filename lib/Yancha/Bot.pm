@@ -62,8 +62,9 @@ sub post_yancha_message {
     my $config = $self->{config};
 
     my @tags = map {
-        $_ = '#'.$_ unless $_ =~ /^#/;
-        uc($_);
+        my $new_tag = $_;
+        $new_tag = '#'.$_ unless $_ =~ /^#/;
+        uc($new_tag);
     } ref( $config->{YanchaTag} ) eq 'ARRAY' ? @{$config->{YanchaTag}} : ( $config->{YanchaTag} );
 
     $message =~ s/#/＃/g;
