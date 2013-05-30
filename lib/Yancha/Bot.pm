@@ -41,7 +41,7 @@ sub up {
     my $req    = AnyEvent::HTTP::Request->new(
         {
             method => 'GET',
-            uri    => $uri->as_strintg,
+            uri    => $uri->as_string,
             cb => sub {
                 my $body  = shift;
                 $self->{yancha_auth_token} = $body;
