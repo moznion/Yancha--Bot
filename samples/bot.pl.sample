@@ -1,0 +1,35 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use utf8;
+use AnyEvent;
+use File::Spec;
+use File::Basename 'dirname';
+use lib File::Spec->catdir(dirname(__FILE__), '..', 'lib');
+
+use Yancha::Bot;
+
+my $cv = AnyEvent->condvar;
+
+my $w;
+
+my $bot = Yancha::Bot->new(
+    {
+        'YanchaUrl' => 'http://127.0.0.1:3000',
+        'YanchaTag' => [qw[public oreore]],
+        'BotName'   => 'しもつかれbot',
+    }, 
+    sub {
+        my $self = shift;
+        $w = AnyEvent->timer(after => 0, interval => 3, cb => sub {
+            $self->post_yancha_message('しもつかれたべようよー');
+        });
+    }
+);
+
+$bot->up;
+
+$cv->begin;
+$cv->recv;
+
+

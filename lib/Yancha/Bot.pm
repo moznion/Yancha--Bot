@@ -4,13 +4,21 @@ use warnings;
 use utf8;
 use Carp;
 
-use URI::Escape;
+use URI;
 use AnyEvent::HTTP::Request;
 
 our $VERSION = '0.11';
 
 sub new {
     my ( $class, $config, $callback ) = @_;
+
+    ### set default values
+    $config              ||= {};
+    $config->{YanchaUrl} ||= 'http://127.0.0.1:3000';
+    $config->{BotName}   ||= __PACKAGE__;
+    $config->{YanchaTag} ||= '#PUBLIC';
+    $callback            ||= sub { };
+
     bless {
         config            => $config,
         callback          => $callback,
@@ -22,13 +30,18 @@ sub up {
     my $self = shift;
 
     my $config = $self->{config};
+
+    my $uri    = URI->new( $config->{YanchaUrl} );
+    $uri->path('/login');
+    $uri->query_form(
+        nick       => $config->{BotName},
+        token_only => 1,
+    );
+
     my $req    = AnyEvent::HTTP::Request->new(
         {
             method => 'GET',
-            uri    => $config->{YanchaUrl}
-              . '/login?nick='
-              . uri_escape_utf8( $config->{BotName} )
-              . '&token_only=1',
+            uri    => $uri->as_string,
             cb => sub {
                 my $body  = shift;
                 $self->{yancha_auth_token} = $body;
@@ -48,25 +61,25 @@ sub post_yancha_message {
 
     my $config = $self->{config};
 
-    # Set default tag (#PUBLIC)
-    $config->{YanchaTag} ||= '#PUBLIC';
-
-    # Complete '#' prefix.
-    unless ($config->{YanchaTag} =~ /^#/) {
-        $config->{YanchaTag} = '#' . $config->{YanchaTag};
-    }
+    my @tags = map {
+        $_ = '#'.$_ unless $_ =~ /^#/;
+        uc($_);
+    } ref( $config->{YanchaTag} ) eq 'ARRAY' ? @{$config->{YanchaTag}} : ( $config->{YanchaTag} );
 
     $message =~ s/#/＃/g;
-    $message .= " $config->{YanchaTag}";
+    $message = join( ' ', $message, @tags );
+
+    my $uri = URI->new( $config->{YanchaUrl} );
+    $uri->path('/api/post');
+    $uri->query_form(
+        token => $self->{yancha_auth_token},
+        text  => $message,
+    );
 
     my $req = AnyEvent::HTTP::Request->new(
         {
             method => 'GET',
-            uri    => $config->{YanchaUrl}
-              . '/api/post?token='
-              . $self->{yancha_auth_token}
-              . '&text='
-              . uri_escape_utf8($message),
+            uri    => $uri->as_string,
             cb => sub {
                 my $body = shift;
               }
@@ -86,7 +99,7 @@ sub callback_later {
         after => $after,
         cb    => sub {
             undef $callback_timer;
-            $self->{callback}->();
+            $self->{callback}->($self);
         }
     );
 }

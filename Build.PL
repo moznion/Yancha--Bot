@@ -16,7 +16,7 @@ my $builder = Module::Build->new(
     },
     requires => {
         perl                      => '5.008009',
-        'URI::Escape'             => '3.31',
+        'URI'                     => '1.60',
         'AnyEvent::HTTP::Request' => '0.301',
     },
     add_to_cleanup => ['Yancha-Bot-*'],
