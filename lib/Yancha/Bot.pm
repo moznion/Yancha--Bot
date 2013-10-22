@@ -67,7 +67,6 @@ sub post_yancha_message {
         uc($new_tag);
     } ref( $config->{YanchaTag} ) eq 'ARRAY' ? @{$config->{YanchaTag}} : ( $config->{YanchaTag} );
 
-    $message =~ s/#/＃/g;
     $message = join( ' ', $message, @tags );
 
     my $uri = URI->new( $config->{YanchaUrl} );
