@@ -4,7 +4,7 @@
       "moznion  C<< <moznion@gmail.com> >>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.4.5, CPAN::Meta::Converter version 2.130880",
+   "generated_by" : "Minilla/v0.8.0, CPAN::Meta::Converter version 2.132660",
    "license" : [
       "perl_5"
    ],
@@ -21,7 +21,8 @@
          "share",
          "eg",
          "examples",
-         "author"
+         "author",
+         "builder"
       ]
    },
    "prereqs" : {
@@ -61,14 +62,14 @@
       "homepage" : "https://github.com/moznion/Yancha--Bot",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/moznion/Yancha--Bot.git",
+         "url" : "git://github.com/moznion/Yancha--Bot",
          "web" : "https://github.com/moznion/Yancha--Bot"
       }
    },
    "version" : "0.12",
    "x_contributors" : [
-      "Takayuki Otake <k.wisiiy@gmail.com>",
       "ytnobody <ytnobody@gmail.com>",
+      "ichigotake <k.wisiiy@gmail.com>",
       "moznion <moznion@gmail.com>"
    ]
 }
