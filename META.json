@@ -44,9 +44,9 @@
       },
       "runtime" : {
          "requires" : {
-            "AnyEvent" : "7.04",
-            "AnyEvent::HTTP::Request" : "0.301",
-            "URI" : "1.60",
+            "AnyEvent" : "0",
+            "AnyEvent::HTTP::Request" : "0",
+            "URI" : "0",
             "perl" : "5.008009"
          }
       },
@@ -68,7 +68,7 @@
          "web" : "https://github.com/moznion/Yancha--Bot"
       }
    },
-   "version" : "0.12",
+   "version" : "0.13",
    "x_contributors" : [
       "ytnobody <ytnobody@gmail.com>",
       "ichigotake <k.wisiiy@gmail.com>",
